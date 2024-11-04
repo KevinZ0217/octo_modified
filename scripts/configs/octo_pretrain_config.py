@@ -26,7 +26,9 @@ def update_config(config, **kwargs):
 def get_config(config_string=None):
     config = get_base_config(config_string)
 
-    action_dim = FieldReference(7)
+    config["window_size"] = 2
+    # config["num_steps"] = 300000
+    config["num_steps"] = 300
 
     config["model"]["observation_tokenizers"] = {
         "primary": ModuleSpec.create(
@@ -129,8 +131,11 @@ def get_config(config_string=None):
                     rephrase_prob=0.5,
                 ),
             ),
-            batch_size=512,
-            shuffle_buffer_size=500000,
+
+            batch_size=128,
+            shuffle_buffer_size=5000, #500000
+            
+
             balance_weights=True,
         ),
         text_processor=ModuleSpec.create(
@@ -150,7 +155,8 @@ def get_config(config_string=None):
                 hf_model="t5-base",
             ),
         ),
-        eval_datasets=["bridge_dataset"],
+        # eval_datasets=["bridge_dataset"],
+        eval_datasets=["berkeley_cable_routing"],
     )
 
     return config
